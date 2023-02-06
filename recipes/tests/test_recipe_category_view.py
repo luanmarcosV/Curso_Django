@@ -22,7 +22,7 @@ class RecipeCategoryTest(TestCase):
         # Need a recipe for this test
         rtb.make_recipe(title=needed_title)
 
-        response = self.client.get(reverse('recipes:category', args=(1,)))
+        response = self.client.get(reverse('category', args=(1,)))
         content = response.content.decode('utf-8')
 
         # Check if one recipe exists

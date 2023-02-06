@@ -31,7 +31,7 @@ def register_create(request):
         messages.success(request, 'Your user is created, please log in.')
 
         del(request.session['register_form_data'])
-        return redirect(reverse('authors:login'))
+        return redirect(reverse('login'))
     
     return redirect('register')
 
@@ -65,13 +65,17 @@ def login_create(request):
 
     return redirect(login_url)
 
-@login_required(login_url='authors:login', redirect_field_name='next')
+@login_required(login_url='login', redirect_field_name='next')
 def logout_view(request):
     if not request.POST:
-        return redirect(reverse('authors:login'))
+        messages.error(request, 'Invalid logout request')
+        return redirect(reverse('login'))
 
     if request.POST.get('username') != request.user.username:
-        return redirect(reverse('authors:login'))
+        messages.error(request, 'Invalid logout user')
+        return redirect(reverse('login'))
 
+    messages.success(request, 'Logged out successfully')
+    
     logout(request)
-    return redirect(reverse('authors:login'))
+    return redirect(reverse('login'))

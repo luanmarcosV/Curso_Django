@@ -24,7 +24,7 @@ class RecipeDetailTest(TestCase):
 
         response = self.client.get(
             reverse(
-                'recipes:recipe',
+                'recipe',
                 kwargs={
                     'id': 1
                 }
