@@ -5,6 +5,8 @@ from .forms import LoginForm, RegisterForm
 from django.http import Http404
 from django.contrib import messages
 from django.urls import reverse
+from recipes.models import Recipe
+from authors.forms.recipe_form import AuthorRecipeForm
 
 # Create your views here.
 def register(request):
@@ -47,7 +49,6 @@ def login_create(request):
         raise Http404()
 
     form = LoginForm(request.POST)
-    login_url = reverse('login')
 
     if form.is_valid():
         authenticated_user = authenticate(
@@ -63,7 +64,7 @@ def login_create(request):
     else:
         messages.error(request, 'Invalid username or password')
 
-    return redirect(login_url)
+    return redirect(reverse('dashboard'))
 
 @login_required(login_url='login', redirect_field_name='next')
 def logout_view(request):
@@ -79,3 +80,55 @@ def logout_view(request):
     
     logout(request)
     return redirect(reverse('login'))
+
+@login_required(login_url='login', redirect_field_name='next')
+def dashboard(request):
+    recipes = Recipe.objects.filter(
+        is_published=False,
+        author=request.user
+    )
+    return render(
+        request,
+        'authors/pages/dashboard.html',
+        context={
+            'recipes': recipes,
+        }
+    )
+    
+@login_required(login_url='login', redirect_field_name='next')
+def dashboard_recipe_edit(request, id):
+    recipe = Recipe.objects.filter(
+        is_published=False,
+        author=request.user,
+        pk=id,
+    ).first()
+
+    if not recipe:
+        raise Http404()
+    
+    form = AuthorRecipeForm(
+        data=request.POST or None,
+        instance=recipe
+    )
+    
+    if form.is_valid():
+        # Agora, o form é válido e eu posso tentar salvar
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_html = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request, 'Sua receita foi salva com sucesso!')
+        return redirect(reverse('authors:dashboard_recipe_edit', args=(id,)))
+
+
+    return render(
+        request,
+        'authors/pages/dashboard_recipe.html',
+        context={
+            'form': form
+        }
+    )
