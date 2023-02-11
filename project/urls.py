@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('recipes.urls')), #/home/
     path('authors/', include('authors.urls')), #/authors/
+    path('__debug__/', include('debug_toolbar.urls')), #debug_toolbar
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

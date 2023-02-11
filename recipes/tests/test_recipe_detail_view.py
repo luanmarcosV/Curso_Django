@@ -11,9 +11,9 @@ class RecipeDetailTest(TestCase):
     
     def test_recipe_detail_view_function_is_correct(self):
         view = resolve(
-            reverse('recipe', kwargs={'id': 1})
+            reverse('recipe', kwargs={'pk': 1})
         )
-        self.assertIs(view.func, views.recipe)
+        self.assertIs(view.func.view_class, views.RecipeDetail)
 
     # Test para verificar se a página da receita está carregando corretamente
     def test_recipe_detail_template_loads_the_correct_recipe(self):
@@ -26,7 +26,7 @@ class RecipeDetailTest(TestCase):
             reverse(
                 'recipe',
                 kwargs={
-                    'id': 1
+                    'pk': 1
                 }
             )
         )
@@ -37,6 +37,6 @@ class RecipeDetailTest(TestCase):
 
     def test_recipe_detail_view_returns_404_if_no_recipes_found(self):
         response = self.client.get(
-        reverse('recipe', kwargs={'id': 1000})
+        reverse('recipe', kwargs={'pk': 1000})
         )
         self.assertEqual(response.status_code, 404)
