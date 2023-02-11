@@ -1,7 +1,18 @@
+import os
+import string
+from collections import defaultdict
+from random import SystemRandom
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import F, Value
+from django.db.models.functions import Concat
+from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
 # Create your models here.
 
@@ -36,7 +47,7 @@ class Recipe(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('recipes:recipe', args=(self.id,))
+        return reverse('recipe', args=(self.id,))
     
     def save(self, *args, **kwargs):
         if not self.slug:

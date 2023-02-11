@@ -14,7 +14,7 @@ class RecipeCategoryTest(TestCase):
         view = resolve(
             reverse('category', kwargs={'category_id': 1000})
         )
-        self.assertIs(view.func, views.category)
+        self.assertIs(view.func.view_class, views.RecipeListViewCategory)
         
     # Test para verificar se as receitas aparecem na página de Categorias
     def test_recipe_category_template_loads_recipes(self):

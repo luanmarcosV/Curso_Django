@@ -3,9 +3,15 @@ from django.urls import path
 from recipes import views
 
 urlpatterns = [
-    path('', views.home, name='home'), #/home/
-    path('recipes/search/', views.search, name='search'), #/search
-    path('recipes/<int:id>/', views.recipe, name='recipe'), #/recipe/
-    path('recipes/category/<int:category_id>/', views.category, name='category'), #/category/
+    path('', views.RecipeListViewHome.as_view(), name="home"), #/home/
+    path(
+        'recipes/search/',
+        views.RecipeListViewSearch.as_view(), name="search"
+    ),
+    path(
+        'recipes/category/<int:category_id>/',
+        views.RecipeListViewCategory.as_view(), name="category"
+    ),
+    path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name="recipe"), #/recipe/
     
 ]
