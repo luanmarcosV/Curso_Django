@@ -1,4 +1,9 @@
+import os
+import string
 from collections import defaultdict
+from random import SystemRandom
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import F, Value
@@ -6,6 +11,8 @@ from django.db.models.functions import Concat
 from django.forms import ValidationError
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
+from PIL import Image
 
 class Category(models.Model):
     name = models.CharField(max_length=65)
@@ -47,7 +54,6 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True
     )
-    #tags = models.ManyToManyField(Tag, blank=True, default='') PRECISA RESOLVER ISSO
 
     def __str__(self):
         return self.title
