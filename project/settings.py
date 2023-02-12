@@ -28,6 +28,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'INSECURE')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 ALLOWED_HOSTS = ['*']
 
 
