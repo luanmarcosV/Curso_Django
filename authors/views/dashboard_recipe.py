@@ -9,7 +9,7 @@ from django.views import View
 from recipes.models import Recipe
 
 @method_decorator(
-    login_required(login_url='authors:login', redirect_field_name='next'),
+    login_required(login_url='login', redirect_field_name='next'),
     name='dispatch'
 )
 
@@ -74,7 +74,7 @@ class DashboardRecipe(View):
         return self.render_recipe(form)
     
 @method_decorator(
-    login_required(login_url='authors:login', redirect_field_name='next'),
+    login_required(login_url='login', redirect_field_name='next'),
     name='dispatch'
 )
 class DashboardRecipeDelete(DashboardRecipe):
@@ -82,4 +82,4 @@ class DashboardRecipeDelete(DashboardRecipe):
         recipe = self.get_recipe(self.request.POST.get('id'))
         recipe.delete()
         messages.success(self.request, 'Deleted successfully.')
-        return redirect(reverse('authors:dashboard'))
+        return redirect(reverse('dashboard'))
